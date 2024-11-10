@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommender System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 700px;
+            width: 90%;
+            background: white;
+            padding: 2rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #444;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        form {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            color: #555;
+        }
+        select, button {
+            font-size: 1rem;
+            padding: 0.5rem;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        button {
+            background-color: #5c67f2;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #4852c7;
+        }
+        .recommendations {
+            margin-top: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* Two columns */
+            gap: 20px;
+        }
+        .movie-item {
+            text-align: center;
+        }
+        .movie-item img {
+            width: 100px;
+            height: auto;
+            border-radius: 5px;
+        }
+        .movie-title {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Movie Recommender System</h1>
+        <p>Select a movie from the list below to receive similar movie recommendations.</p>
+        <form method="POST" aria-label="Movie Recommendation Form">
+            {{ form.hidden_tag() }}
+            <div>
+                <label for="movies">Choose a Movie:</label><br>
+                {{ form.movies(class="form-control", aria_label="Select Movie") }}
+            </div>
+            <div>
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+        {% if recommendations %}
+            <div class="recommendations">
+                {% for movie in recommendations %}
+                    <div class="movie-item">
+                        <img src="{{ movie.poster_url }}" alt="Poster of {{ movie.title }}">
+                        <div class="movie-title">{{ movie.title }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
