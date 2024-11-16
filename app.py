@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import pickle
 import requests
+import os
 
 app = Flask(__name__)
 
@@ -18,12 +19,14 @@ movies = pd.DataFrame(dictionary)
 
 def fetch_poster(movie_id):
     url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key=81ebc86b93b25ccf118174d9a1c39b28&language=en-US'
-    response = requests.get(url)
-    response = response.json()
-    poster_path = response['poster_path']
-    full_path = 'http://image.tmdb.org/t/p/w500' + poster_path
-    return full_path
-
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an error for bad responses
+        poster_path = response.json().get('poster_path', '')
+        return 'http://image.tmdb.org/t/p/w500' + poster_path if poster_path else None
+    except Exception as e:
+        print(f"Error fetching poster: {e}")
+        return None
 
 
 def recommend_movies(title):
@@ -62,6 +65,6 @@ def home():
     return render_template('recommend.html',form = form,recommendations = recommendations)
 
 
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Default to 5000 if $PORT is not set
+    app.run(host="0.0.0.0", port=port, debug=False)
