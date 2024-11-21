@@ -6,13 +6,10 @@ import numpy as np
 import pickle
 import requests
 import os
-import logging
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'my secret key'
 
-# Setup logging
-logging.basicConfig(level=logging.INFO)
 
 # Load the movies data
 if not os.path.exists('movie_name.pkl'):
@@ -25,12 +22,6 @@ movies = pd.DataFrame(dictionary)
 
 # Caching for poster URLs
 poster_cache = {}
-
-def log_memory():
-    import psutil
-    process = psutil.Process(os.getpid())
-    memory_usage = process.memory_info().rss / 1024 / 1024  # Convert to MB
-    logging.info(f"Memory usage: {memory_usage:.2f} MB")
 
 def fetch_poster(movie_id):
     if movie_id in poster_cache:
@@ -45,11 +36,9 @@ def fetch_poster(movie_id):
         poster_cache[movie_id] = full_path
         return full_path
     except Exception as e:
-        logging.error(f"Error fetching poster for movie_id {movie_id}: {e}")
         return None
 
 def recommend_movies(title):
-    log_memory()
 
     # Get the embedding of the target movie
     target_embedding = movies[movies['original_title'] == title]['embedding'].values[0].reshape(1, -1)
@@ -70,7 +59,6 @@ def recommend_movies(title):
         for _, row in recommendations.iterrows()
     ]
 
-    log_memory()
     return recommended_movies
 
 @app.route('/', methods=['GET', 'POST'])
