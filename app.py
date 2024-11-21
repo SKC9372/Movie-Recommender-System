@@ -6,10 +6,13 @@ import numpy as np
 import pickle
 import requests
 import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'my secret key'
 
+load_dotenv()
+TMDB_API_KEY = os.getenv('TMDB_API_KEY')
 
 # Load the movies data
 if not os.path.exists('movie_name.pkl'):
@@ -27,7 +30,7 @@ def fetch_poster(movie_id):
     if movie_id in poster_cache:
         return poster_cache[movie_id]
 
-    url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key=81ebc86b93b25ccf118174d9a1c39b28&language=en-US'
+    url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={TMDB_API_KEY}&language=en-US'
     try:
         response = requests.get(url)
         response.raise_for_status()
