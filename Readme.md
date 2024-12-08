@@ -62,7 +62,8 @@ The application was deployed using the following technologies:
 ---
 
 ## Demo Link  
-[Insert the link to your demo video or application here]  
+[Demo Video](https://github.com/user-attachments/assets/920a1748-8d78-4773-82bf-db1b5b79bc60
+)  
 
 https://github.com/user-attachments/assets/920a1748-8d78-4773-82bf-db1b5b79bc60
 
